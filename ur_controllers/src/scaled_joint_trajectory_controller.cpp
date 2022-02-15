@@ -51,6 +51,10 @@ controller_interface::return_type ScaledJointTrajectoryController::update(const 
 {
   if (state_interfaces_.back().get_name() == "speed_scaling") {
     scaling_factor_ = state_interfaces_.back().get_value();
+    if (!std::isfinite(scaling_factor_))
+    {
+      scaling_factor_ = 1.0;
+    }
   } else {
     RCLCPP_ERROR(get_node()->get_logger(), "Speed scaling interface not found in hardware interface.");
   }
